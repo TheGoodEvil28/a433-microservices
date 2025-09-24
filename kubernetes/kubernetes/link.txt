@@ -1,0 +1,2 @@
+Backend: thegoodevil/karsajobs:latest
+Frontend: thegoodevil/karsajobs-ui:latest
