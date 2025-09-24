@@ -1,0 +1,2 @@
+docker image reference: docker.io/thegoodevil/item-app:v1
+docker hub url: https://hub.docker.com/r/thegoodevil/item-app
