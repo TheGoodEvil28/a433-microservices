@@ -24,7 +24,7 @@ spec:
             - name: MONGO_INITDB_ROOT_PASSWORD_FILE
               value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
           volumeMounts:
-            - name: mongo-persistent-storage
+            - name: mongo-storage
               mountPath: /data/db
             - name: config
               mountPath: /config
@@ -38,11 +38,6 @@ spec:
         - name: mongo-secret
           secret:
             secretName: mongo-secret
-  volumeClaimTemplates:
-    - metadata:
-        name: mongo-persistent-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 1Gi
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc   # <-- gunakan PVC yang sudah dibuat
