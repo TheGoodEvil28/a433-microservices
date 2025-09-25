@@ -46,3 +46,18 @@ app.listen(process.env.PORT, () => {
     console.log(`Server running at ${process.env.PORT}`);
 });
 
+async function connectToQueue() {
+    let connected = false;
+    while (!connected) {
+        try {
+            connection = await amqp.connect(amqpServer);
+            channel = await connection.createChannel();
+            await channel.assertQueue("order");
+            console.log("Connected to the queue!");
+            connected = true;
+        } catch (err) {
+            console.log("RabbitMQ not ready, retrying in 3s...");
+            await new Promise(res => setTimeout(res, 3000));
+        }
+    }
+}

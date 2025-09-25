@@ -1,0 +1,36 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  order-service:
+    image: thegoodevil/order-service:v1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3000:3000"
+
+  shipping-service:
+    image: thegoodevil/shipping-service:v1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      PORT: 3001
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3001:3001"
